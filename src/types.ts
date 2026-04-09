@@ -114,6 +114,12 @@ export type UploadFileInput = {
   filename: string
   mimeType?: string
   expiresInSeconds?: number
+  autoDestructEnabled?: boolean
+  autoDestructSeconds?: number
+  linkEnabled?: boolean
+  linkExpiresInSeconds?: number
+  serverCompression?: boolean
+  cfTurnstileToken?: string
   parentId?: string
   onProgress?: (progress: UploadProgress) => void
   signal?: AbortSignal

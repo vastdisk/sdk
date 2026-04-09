@@ -12,10 +12,10 @@ export class AuthModule {
   constructor(private readonly http: HttpClient) {}
 
   registerPrepare(): Promise<RegisterPrepareResponse> {
-    return this.http.request('/register/prepare', {
+    return this.http.request<Record<string, unknown>>('/register/prepare', {
       method: 'POST',
       auth: 'none',
-    })
+    }).then(mapRegisterPrepareResponse)
   }
 
   async registerComplete(input: RegisterCompleteInput): Promise<Session> {
@@ -38,7 +38,7 @@ export class AuthModule {
   }
 
   loginStart(input: LoginStartInput): Promise<LoginStartResponse> {
-    return this.http.request('/login', {
+    return this.http.request<Record<string, unknown>>('/login', {
       method: 'POST',
       auth: 'none',
       body: jsonBody({
@@ -46,7 +46,7 @@ export class AuthModule {
       }),
       headers: jsonHeaders(),
       retryOnAuth: false,
-    })
+    }).then(mapLoginStartResponse)
   }
 
   async loginVerify(input: LoginVerifyInput): Promise<Session> {
@@ -114,5 +114,20 @@ function mapSession(input: Record<string, unknown>): Session {
     requires2fa: Boolean(input.requires_2fa),
     loginTicket: typeof input.login_ticket === 'string' ? input.login_ticket : undefined,
     isNewUser: Boolean(input.is_new_user),
+  }
+}
+
+function mapRegisterPrepareResponse(input: Record<string, unknown>): RegisterPrepareResponse {
+  return {
+    accountId: String(input.account_id ?? ''),
+    totpSecret: String(input.totp_secret ?? ''),
+    qrCode: String(input.qr_code ?? ''),
+  }
+}
+
+function mapLoginStartResponse(input: Record<string, unknown>): LoginStartResponse {
+  return {
+    requires2fa: Boolean(input.requires_2fa),
+    loginTicket: String(input.login_ticket ?? ''),
   }
 }

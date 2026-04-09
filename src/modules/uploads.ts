@@ -98,6 +98,12 @@ export class UploadsModule {
       filename: input.filename,
       mimeType: input.mimeType ?? inferMimeType(blob),
       expiresInSeconds: input.expiresInSeconds,
+      autoDestructEnabled: input.autoDestructEnabled,
+      autoDestructSeconds: input.autoDestructSeconds,
+      linkEnabled: input.linkEnabled,
+      linkExpiresInSeconds: input.linkExpiresInSeconds,
+      serverCompression: input.serverCompression,
+      cfTurnstileToken: input.cfTurnstileToken,
       parentId: input.parentId,
     })
 
